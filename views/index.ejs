@@ -47,12 +47,18 @@
                 <button class="btn btn-primary" ng-click="tweet.postTweet()">Submit</button>
             </div>
 
+
         </form>
+        <div class="column col-md-12">
+            <p class="text-danger" ng-bind="tweet.postErrorMessage">Hey there</p>
+        </div>
+
     </div>
     <br><br>
 
     <div class="row">
         <br>
+
         <div ng-repeat="tweetItem in tweet.tweets" class="col-md-6 col-md-offset-3">
 
             <div class="panel panel-default" ng-show="tweet.showTweetFlag[$index]">
@@ -61,6 +67,7 @@
                     {{tweetItem.body}}
 
                     <br><br>
+
                     <div class="column col-md-12">
                         <input type="button" ng-click="tweet.changeEditFormVisibility($index)" value="Edit"
                                class="btn btn-default btn-sm">
@@ -69,25 +76,30 @@
                     </div>
                     <br>
                     <br>
-                    <div  class="column col-md-12" ng-show="tweet.showEditForm[$index]">
 
-                            <span class="column col-md-1">Name </span>
+                    <div class="column col-md-12" ng-show="tweet.showEditForm[$index]">
 
-                            <div class="column col-md-4">
-                                <input type="text" class="form-control" name="title"
-                                       ng-model="tweetItem.title"/>
-                            </div>
+                        <span class="column col-md-1">Name </span>
 
-                            <span class="column col-md-1">Tweet&nbsp;&nbsp; &nbsp;</span>
+                        <div class="column col-md-4">
+                            <input type="text" class="form-control" name="title"
+                                   ng-model="tweetItem.title"/>
+                        </div>
 
-                            <div class="column col-md-4">
-                                <input type="text" name="body" class="form-control"
-                                       ng-model="tweetItem.body"/>
-                            </div>
+                        <span class="column col-md-1">Tweet&nbsp;&nbsp; &nbsp;</span>
 
-                            <div class="column col-md-2">
-                                <button class="btn btn-primary btn-sm" ng-click="tweet.updateTweet($index)">Submit</button>
-                            </div>
+                        <div class="column col-md-4">
+                            <input type="text" name="body" class="form-control"
+                                   ng-model="tweetItem.body"/>
+                        </div>
+
+                        <div class="column col-md-2">
+                            <button class="btn btn-primary btn-sm" ng-click="tweet.updateTweet($index)">Submit</button>
+                        </div>
+
+                        <div class="column col-md-12">
+                            <p class="text-danger" ng-bind="tweet.updateErrorMessage[$index]">Hey there</p>
+                        </div>
 
 
                     </div>

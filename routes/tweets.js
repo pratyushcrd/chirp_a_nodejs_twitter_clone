@@ -3,11 +3,12 @@ var router = express.Router();
 var Tweet = require('../models/Tweet');
 var upload = require('multer')();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
 
-    Tweet.find(function(err, tweets){
-        if(err){
+/* GET users listing. */
+router.get('/', function (req, res, next) {
+
+    Tweet.find(function (err, tweets) {
+        if (err) {
             return next(err);
         }
         res.json(tweets);
@@ -15,51 +16,56 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/', upload.array(), function(req, res, next) {
+router.post('/', upload.array(), function (req, res, next) {
     var newTweet = {};
     newTweet.title = req.body.title;
     newTweet.body = req.body.body;
 
-    Tweet.create(newTweet, function(err, tweet){
-        if(err){
-            return next(err);
+    Tweet.create(newTweet, function (err, tweet) {
+        if (err) {
+            console.log(err);
+            res.status = 400;
+            var errorField = Object.keys(err.errors)[0];
+            var errorMessage = err.errors[errorField];
+            res.json({error: errorField + ' ' + errorMessage});
         }
         res.json(tweet);
     });
 });
 
-router.get('/:id', function(req, res, next) {
-    Tweet.findById(req.params.id, function(err, tweet){
-        if(err){
+router.get('/:id', function (req, res, next) {
+    Tweet.findById(req.params.id, function (err, tweet) {
+        if (err) {
             return next(err);
         }
         res.json(tweet);
     })
 });
 
-router.delete('/:id', function(req, res, next) {
-    Tweet.findByIdAndRemove(req.params.id, function(err, tweet){
-        if(err){
+router.delete('/:id', function (req, res, next) {
+    Tweet.findByIdAndRemove(req.params.id, function (err, tweet) {
+        if (err) {
             return next(err);
         }
         res.json(tweet);
     })
 });
 
-router.put('/:id', upload.array(), function(req, res, next) {
+router.put('/:id', upload.array(), function (req, res, next) {
     var newTweet = {};
     newTweet.title = req.body.title;
     newTweet.body = req.body.body;
 
-    Tweet.findByIdAndUpdate(req.params.id, newTweet, function(err, tweet){
-        if(err){
-            return next(err);
+    Tweet.findOneAndUpdate(req.params.id, newTweet, function (err, tweet) {
+        if (err) {
+            res.status = 400;
+            var errorField = Object.keys(err.errors)[0];
+            var errorMessage = err.errors[errorField];
+            res.json({error: errorField + ' ' + errorMessage});
         }
         res.json(tweet);
     })
 });
-
-
 
 
 module.exports = router;
