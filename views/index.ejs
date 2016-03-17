@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chirp</title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap-lumen.css'/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <script src="javascripts/angular.min.js"></script>
+    <script src="javascripts/angular-resource.min.js"></script>
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/bootstrap.js"></script>
+    <script src="javascripts/app.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">Chirp</a>
+        </div>
+
+        <p class="navbar-text navbar-right">A Twitter Clone by Pratyush&nbsp;&nbsp;&nbsp;</p>
+
+    </div>
+</nav>
+
+
+<div ng-controller="TweetController as tweet" class="container">
+
+
+    <div class="col-md-6 col-md-offset-3">
+        <form class="form-horizontal">
+
+            <label class="column col-md-1">Name </label>
+
+            <div class="column col-md-3">
+                <input type="text" class="form-control" name="title" ng-model="tweet.postObjectTweet.title"/>
+            </div>
+
+            <label class="column col-md-2">Tweet</label>
+
+            <div class="column col-md-4">
+                <input type="text" name="body" class="form-control" ng-model="tweet.postObjectTweet.body"/>
+            </div>
+
+            <div class="column col-md-2">
+                <button class="btn btn-primary" ng-click="tweet.postTweet()">Submit</button>
+            </div>
+
+        </form>
+    </div>
+    <br><br>
+
+    <div class="row">
+        <br>
+        <div ng-repeat="tweetItem in tweet.tweets" class="col-md-6 col-md-offset-3">
+
+            <div class="panel panel-default" ng-show="tweet.showTweetFlag[$index]">
+                <div class="panel-heading">{{tweetItem.title}}</div>
+                <div class="panel-body">
+                    {{tweetItem.body}}
+
+                    <br><br>
+                    <div class="column col-md-12">
+                        <input type="button" ng-click="tweet.changeEditFormVisibility($index)" value="Edit"
+                               class="btn btn-default btn-sm">
+                        <input type="button" ng-click="tweet.deleteTweet($index)" value="Delete"
+                               class="col-md-offset-1 btn btn-sm btn-default">
+                    </div>
+                    <br>
+                    <br>
+                    <div  class="column col-md-12" ng-show="tweet.showEditForm[$index]">
+
+                            <span class="column col-md-1">Name </span>
+
+                            <div class="column col-md-4">
+                                <input type="text" class="form-control" name="title"
+                                       ng-model="tweetItem.title"/>
+                            </div>
+
+                            <span class="column col-md-1">Tweet&nbsp;&nbsp; &nbsp;</span>
+
+                            <div class="column col-md-4">
+                                <input type="text" name="body" class="form-control"
+                                       ng-model="tweetItem.body"/>
+                            </div>
+
+                            <div class="column col-md-2">
+                                <button class="btn btn-primary btn-sm" ng-click="tweet.updateTweet($index)">Submit</button>
+                            </div>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
