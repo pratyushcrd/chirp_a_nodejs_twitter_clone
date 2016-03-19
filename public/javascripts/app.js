@@ -1,10 +1,9 @@
 /**
  * Created by Pratyush on 14-03-2016.
  */
-var app = angular.module('myApp', ['ngResource']);
+var app = angular.module('myApp', ['ngResource', 'ngRoute']);
 
-app.factory(
-    'Tweet', function ($resource) {
+app.factory('Tweet', function ($resource) {
         return $resource('tweets/:id', null, {
             'update': {method: 'PUT'}
         });
@@ -69,6 +68,7 @@ app.controller('TweetController', function ($http, Tweet) {
                 _this.showTweetFlag.unshift(true);
                 _this.postObjectTweet = {};
                 _this.showEditForm.unshift(false);
+                _this.updateErrorMessage.unshift('');
                 _this.postErrorMessage = '';
             }
 
@@ -78,4 +78,38 @@ app.controller('TweetController', function ($http, Tweet) {
         });
 
     }
+});
+
+app.controller('NavbarController', function($http){
+    var _this = this;
+    _this.isLoggedIn = false;
+    _this.userName = '';
+
+
+    $http.get('/account/user', null, null).then(function(response){
+        if(response.data.id){
+            _this.isLoggedIn = true;
+            _this.userName = response.data.username;
+        }
+    });
+});
+
+app.config(function ($routeProvider, $locationProvider) {
+    $routeProvider
+        .when('/', {
+            templateUrl: '/html/index_tweets.html',
+            controller: 'TweetController',
+            controllerAs: 'tweet'
+        })
+        .when('/login', {
+            templateUrl: '/html/login.html',
+            controller: 'LoginController',
+            controllerAs: 'login'
+        });
+
+    // configure html5 to get links working on jsfiddle
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+    });
 });

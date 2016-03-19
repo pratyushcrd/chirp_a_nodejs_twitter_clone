@@ -7,6 +7,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 mongoose.connect('mongodb://localhost/meanapp8x7yu', function(err){
     if(err){
@@ -18,6 +21,7 @@ mongoose.connect('mongodb://localhost/meanapp8x7yu', function(err){
 
 var index = require('./routes/index');
 var tweets = require('./routes/tweets');
+var accountRoute = require('./routes/account');
 
 var app = express();
 
@@ -28,13 +32,27 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
+
+var Account = require('./models/User');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 app.use('/', index);
 app.use('/tweets', tweets);
+app.use('/account', accountRoute);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
