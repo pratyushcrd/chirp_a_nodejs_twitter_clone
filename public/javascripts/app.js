@@ -80,18 +80,42 @@ app.controller('TweetController', function ($http, Tweet) {
     }
 });
 
-app.controller('NavbarController', function($http){
+app.controller('SingleTweetController', function ($routeParams, $http, Tweet) {
+    var _this = this;
+    _this.tweetId = $routeParams.tweetId;
+});
+
+app.controller('NavbarController', function ($http) {
     var _this = this;
     _this.isLoggedIn = false;
     _this.userName = '';
 
 
-    $http.get('/account/user', null, null).then(function(response){
-        if(response.data.id){
+    $http.get('/account/user', null, null).then(function (response) {
+        if (response.data.id) {
             _this.isLoggedIn = true;
             _this.userName = response.data.username;
         }
     });
+});
+
+app.controller('LoginController', function ($http) {
+    var _this = this;
+    _this.errorMesage = '';
+    _this.loginObject = {};
+
+    _this.doLogin = function () {
+        _this.errorMesage = '';
+        console.log(_this.loginObject);
+        $http.post('/account/login', _this.loginObject, null).then(function(){
+            window.location = '/';
+        }, function(){
+            _this.errorMesage = 'Username or password incorrect'
+        });
+
+    }
+
+
 });
 
 app.config(function ($routeProvider, $locationProvider) {
@@ -105,6 +129,16 @@ app.config(function ($routeProvider, $locationProvider) {
             templateUrl: '/html/login.html',
             controller: 'LoginController',
             controllerAs: 'login'
+        })
+        .when('/:tweetId', {
+            templateUrl: '/html/show_tweet.html',
+            controller: 'SingleTweetController',
+            controllerAs: 'single'
+        })
+        .otherwise({
+            templateUrl: '/html/index_tweets.html',
+            controller: 'TweetController',
+            controllerAs: 'tweet'
         });
 
     // configure html5 to get links working on jsfiddle

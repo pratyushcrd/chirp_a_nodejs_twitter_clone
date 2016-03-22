@@ -8,17 +8,18 @@ var validator = require('node-mongoose-validator');
 
 var User = new Schema({
     email: {type: String, index: {unique: true, dropDups: true}},
-    username: {type: String, required: true},
-    password: {type: String, required: true}
+    username: {type: String, required: true, index: {unique: true, dropDups: true}},
+    password: String,
+    tweets: [{type: Schema.Types.ObjectId, ref: 'Tweet'}]
 });
 
 User.path('username').validate(validator.isAlphanumeric(), 'must not special characters');
 User.path('email').validate(validator.isEmail(), 'is not email');
 User.path('username').validate(validator.isLength(6, 18), 'must be between 6 to 18 characters');
 User.path('username').validate(validator.isLowercase(), 'must be lowercase');
-User.path('password').validate(validator.isLength(6, 18), 'must be between 6 to 18 characters');
 
-
-User.plugin(passportLocalMongoose);
+User.plugin(passportLocalMongoose, {
+    usernameField: 'email'
+});
 
 module.exports = mongoose.model('User', User);

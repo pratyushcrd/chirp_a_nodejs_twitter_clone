@@ -1,15 +1,9 @@
 <div class="col-md-6 col-md-offset-3">
     <form class="form-horizontal">
 
-        <label class="column col-md-1">Title </label>
-
-        <div class="column col-md-3">
-            <input type="text" class="form-control" name="title" ng-model="tweet.postObjectTweet.title"/>
-        </div>
-
         <label class="column col-md-2">Tweet</label>
 
-        <div class="column col-md-4">
+        <div class="column col-md-8">
             <input type="text" name="body" class="form-control" ng-model="tweet.postObjectTweet.body"/>
         </div>
 
@@ -42,23 +36,19 @@
                     <input type="button" ng-click="tweet.changeEditFormVisibility($index)" value="Edit"
                            class="btn btn-default btn-sm">
                     <input type="button" ng-click="tweet.deleteTweet($index)" value="Delete"
-                           class="col-md-offset-1 btn btn-sm btn-default">
+                           class="btn btn-sm btn-default">
+                    <a ng-href="{{'/' + tweetItem._id}}"
+                       class="btn btn-sm btn-default"> Show </a>
                 </div>
                 <br>
                 <br>
 
+                <div>&nbsp;</div>
                 <div class="column col-md-12" ng-show="tweet.showEditForm[$index]">
-
-                    <span class="column col-md-1">Title </span>
-
-                    <div class="column col-md-4">
-                        <input type="text" class="form-control" name="title"
-                               ng-model="tweetItem.title"/>
-                    </div>
 
                     <span class="column col-md-1">Tweet&nbsp;&nbsp; &nbsp;</span>
 
-                    <div class="column col-md-4">
+                    <div class="column col-md-8">
                         <input type="text" name="body" class="form-control"
                                ng-model="tweetItem.body"/>
                     </div>

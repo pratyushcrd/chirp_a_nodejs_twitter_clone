@@ -17,7 +17,7 @@
 <nav class="navbar navbar-default" ng-controller="NavbarController as navbar">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="">Chirp</a>
+            <a class="navbar-brand" href="/" target="_self">Chirp</a>
         </div>
 
         <p class="navbar-text">A Twitter Clone by Pratyush</p>
@@ -27,7 +27,7 @@
             <li ng-show="!navbar.isLoggedIn"><a href="/register">Register</a></li>
             <li class="dropdown" ng-show="navbar.isLoggedIn">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                   aria-expanded="false">Welcome {{navbar.userName}} <span class="caret"></span></a>
+                   aria-expanded="false">Welcome, {{navbar.userName}} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="/account/logout" target="_self">Logout</a></li>
                 </ul>
