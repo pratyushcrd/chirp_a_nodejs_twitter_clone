@@ -1,1 +1,38 @@
-{{single.tweetId}}
+<div class="column col-md-8 col-md-offset-2 row">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">@{{single.tweet.title}}</h3>
+        </div>
+        <div class="panel-body">
+            <p class="lead">{{single.tweet.body}}</p>
+        </div>
+    </div>
+
+    <div class="column col-md-10 col-md-offset-1 comments">
+        <div class="well well-sm row" ng-repeat="comment in single.comments" ng-hide="single.comments_hide[$index]">
+            <div class="column col-md-9">
+                {{comment.body}}
+            </div>
+            <div class="column col-md-1 btn btn-sm" style="color: #a2a2a2;" ng-click="single.deleteComment($index)">
+                <div class="fa fa-remove">
+
+                </div>
+            </div>
+            <div class="column col-md-2 text-muted" style="word-wrap: break-word; font-size: 13px;">
+                @{{comment.title}}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="column col-md-10 col-md-offset-1 comments" ng-show="single.isLoggedIn">
+
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1">@{{single.user.username}}</span>
+            <input type="text" class="form-control" ng-model="single.newComment " placeholder="Press enter to submit"
+                   aria-describedby="basic-addon1" my-enter="single.comment()">
+        </div>
+
+    </div>
+
+</div>

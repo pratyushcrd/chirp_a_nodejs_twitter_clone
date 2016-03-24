@@ -49,10 +49,9 @@ passport.use(new LocalStrategy(Account.authenticate()));
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
 
-app.use('/', index);
 app.use('/tweets', tweets);
 app.use('/account', accountRoute);
-
+app.use('*', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

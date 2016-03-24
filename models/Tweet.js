@@ -10,7 +10,8 @@ var TweetSchema = new mongoose.Schema({
     _creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     title: {type: String, required: [true, 'cannot be empty']},
     body: {type: String, required: [true, 'cannot be empty']},
-    updated_at: {type: Date, default: Date.now}
+    updated_at: {type: Date, default: Date.now},
+    comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 });
 
 TweetSchema.pre('findOneAndUpdate', function (next) {

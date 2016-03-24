@@ -10,7 +10,8 @@ var User = new Schema({
     email: {type: String, index: {unique: true, dropDups: true}},
     username: {type: String, required: true, index: {unique: true, dropDups: true}},
     password: String,
-    tweets: [{type: Schema.Types.ObjectId, ref: 'Tweet'}]
+    tweets: [{type: Schema.Types.ObjectId, ref: 'Tweet'}],
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 });
 
 User.path('username').validate(validator.isAlphanumeric(), 'must not special characters');

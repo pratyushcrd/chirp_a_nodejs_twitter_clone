@@ -3,6 +3,20 @@
  */
 var app = angular.module('myApp', ['ngResource', 'ngRoute']);
 
+app.directive('myEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.myEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
+
 app.factory('Tweet', function ($resource) {
         return $resource('tweets/:id', null, {
             'update': {method: 'PUT'}
@@ -10,7 +24,14 @@ app.factory('Tweet', function ($resource) {
     }
 );
 
-app.controller('TweetController', function ($http, Tweet) {
+app.factory('Comment', function ($resource) {
+        return $resource('tweets/:id/comments/:cid', null, {
+            'update': {method: 'PUT'}
+        });
+    }
+);
+
+app.controller('TweetController', function ($http, Tweet)  {
     var _this = this;
     _this.tweets = [];
     _this.postObjectTweet = {};
@@ -48,7 +69,11 @@ app.controller('TweetController', function ($http, Tweet) {
 
     _this.deleteTweet = function (index) {
         Tweet.remove({id: _this.tweets[index]._id}, function (tweet, err) {
-            _this.showTweetFlag[index] = false;
+            if(tweet.error){
+
+            }else{
+                _this.showTweetFlag[index] = false;
+            }
         });
 
     };
@@ -80,9 +105,52 @@ app.controller('TweetController', function ($http, Tweet) {
     }
 });
 
-app.controller('SingleTweetController', function ($routeParams, $http, Tweet) {
+app.controller('SingleTweetController', function ($routeParams, $http, Tweet, Comment) {
     var _this = this;
     _this.tweetId = $routeParams.tweetId;
+    _this.tweet = Tweet.get({id: _this.tweetId}, null);
+    _this.user = {};
+    _this.comments_hide = [];
+    _this.isLoggedIn = false;
+
+    _this.comments = Comment.query({id: _this.tweetId},function () {
+        _this.comments = _this.comments.reverse();
+        for(item in _this.comments){
+            _this.comments_hide.push(false);
+        }
+    });
+
+    $http.get('/account/user', null, null).then(function (response) {
+        if (response.data.id) {
+            _this.isLoggedIn = true;
+            _this.user = response.data;
+        }
+    });
+
+    _this.deleteComment = function(index){
+        Comment.remove({id: _this.tweetId, cid: _this.comments[index]._id}, function(err, comment){
+            if(comment.error){
+
+            }else{
+                _this.comments_hide[index] = true;
+            }
+        });
+    }
+
+    _this.comment = function(){
+        var comment = new Comment();
+        comment.comment = _this.newComment;
+        comment.$save({id: _this.tweetId}, function(comment){
+            if(comment.error){
+
+            }else{
+                _this.comments.unshift(comment);
+                _this.comments_hide.unshift(false);
+            }
+            _this.newComment = '';
+        });
+    }
+
 });
 
 app.controller('NavbarController', function ($http) {
